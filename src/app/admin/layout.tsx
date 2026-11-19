@@ -10,7 +10,11 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
 
-  if (!session || session.user?.role !== "Admin") {
+  if (!session) {
+    redirect("/login");
+  }
+
+  if (session.user?.role !== "Admin") {
     redirect("/");
   }
 
@@ -21,6 +25,7 @@ export default async function AdminLayout({
           <Link href="/admin" className="font-bold text-xl text-primary block">
             Apex Admin
           </Link>
+
           <nav className="space-y-2">
             <Link
               href="/admin"
@@ -29,23 +34,29 @@ export default async function AdminLayout({
               Overview
             </Link>
             <Link
-              href="/admin/users"
+              href="/admin/cars"
               className="block px-3 py-2 rounded-md hover:bg-muted font-medium transition-colors"
             >
-              Manage Users
+              Manage Cars
             </Link>
             <Link
-              href="/"
-              className="block px-3 py-2 rounded-md hover:bg-muted text-muted-foreground transition-colors"
+              href="/admin/bookings"
+              className="block px-3 py-2 rounded-md hover:bg-muted font-medium transition-colors"
             >
-              ← Back to Website
+              Bookings Control
+            </Link>
+            <Link
+              href="/admin/calendar"
+              className="block px-3 py-2 rounded-md hover:bg-muted font-medium transition-colors"
+            >
+              Blocked Dates
             </Link>
           </nav>
         </div>
 
         <div className="pt-4 border-t border-border">
           <p className="text-xs text-muted-foreground mb-2 truncate">
-            {session.user?.email}
+            {session.user?.name || session.user?.email}
           </p>
           <LogoutButton />
         </div>
